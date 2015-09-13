@@ -1,4 +1,4 @@
-<img src="Hyperdrive.png" width=51 height=49 alt="Hyperdrive Logo" />
+<img src="https://raw.githubusercontent.com/the-hypermedia-project/Hyperdrive/master/Hyperdrive.png" width=51 height=49 alt="Hyperdrive Logo" />
 
 # RxHyperdrive
 
