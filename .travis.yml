@@ -6,4 +6,4 @@ before_install:
 script:
 - set -o pipefail
 - xcodebuild -workspace RxHyperdrive.xcworkspace -scheme RxHyperdrive test -sdk macosx | xcpretty -c
-- pod lib lint
+- pod lib lint --quick
