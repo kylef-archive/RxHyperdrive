@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'RxHyperdrive'
-  spec.version = '0.1.0'
+  spec.version = '0.1.1'
   spec.summary = 'RxSwift extensions for Hyperdrive, the generic Swift Web API client'
   spec.homepage = 'https://github.com/kylef/RxHyperdrive'
   spec.license = { :type => 'MIT', :file => 'LICENSE' }
