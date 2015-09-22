@@ -2,6 +2,8 @@
 
 # RxHyperdrive
 
+[![Build Status](https://travis-ci.org/kylef/RxHyperdrive.svg?branch=master)](https://travis-ci.org/kylef/RxHyperdrive)
+
 RxSwift extensions for [Hyperdrive](https://github.com/the-hypermedia-project/Hyperdrive), the generic Swift Web API client.
 
 ## Usage
