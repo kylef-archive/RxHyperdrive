@@ -6,7 +6,7 @@
 //  Copyright © 2015 Cocode. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+@import Foundation;
 
 //! Project version number for RxHyperdrive.
 FOUNDATION_EXPORT double RxHyperdriveVersionNumber;
