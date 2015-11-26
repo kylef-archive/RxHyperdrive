@@ -13,6 +13,6 @@ Pod::Spec.new do |spec|
   spec.watchos.deployment_target = '2.0'
   spec.requires_arc = true
   spec.dependency 'Hyperdrive', '~> 0.2.0'
-  spec.dependency 'RxSwift', '2.0.0-alpha.3'
+  spec.dependency 'RxSwift', '2.0.0-beta.3'
 end
 

@@ -15,7 +15,7 @@ Represents sequence event
 Sequence grammar:
 Next\* (Error | Completed)
 */
-public enum Event<Element> : CustomStringConvertible {
+public enum Event<Element> : CustomDebugStringConvertible {
     /**
     Next element is produced
     */
@@ -30,11 +30,13 @@ public enum Event<Element> : CustomStringConvertible {
     Sequence completes sucessfully
     */
     case Completed
-    
+}
+
+extension Event {
     /**
     - returns: Description of event
     */
-    public var description: String {
+    public var debugDescription: String {
         get {
             switch self {
             case .Next(let value):
@@ -74,10 +76,8 @@ extension Event {
     public var isStopEvent: Bool {
         get {
             switch self {
-            case .Next:
-                return false
-            case .Error: fallthrough
-            case .Completed: return true
+            case .Next: return false
+            case .Error, .Completed: return true
             }
         }
     }
@@ -87,12 +87,10 @@ extension Event {
     */
     public var element: Element? {
         get {
-            switch self {
-            case .Next(let value):
+            if case .Next(let value) = self {
                 return value
-            case .Error: fallthrough
-            case .Completed: return nil
             }
+            return nil
         }
     }
     
@@ -101,14 +99,10 @@ extension Event {
     */
     public var error: ErrorType? {
         get {
-            switch self {
-            case .Next:
-                return nil
-            case .Error(let error):
+            if case .Error(let error) = self {
                 return error
-            case .Completed:
-                return nil
             }
+            return nil
         }
     }
 }

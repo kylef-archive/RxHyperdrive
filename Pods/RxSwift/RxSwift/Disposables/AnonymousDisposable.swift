@@ -17,7 +17,7 @@ public final class AnonymousDisposable : DisposeBase, Cancelable {
     public typealias DisposeAction = () -> Void
     
     private var _disposed: Int32 = 0
-    private var disposeAction: DisposeAction?
+    private var _disposeAction: DisposeAction?
     
     /**
     - returns: Was resource disposed.
@@ -34,7 +34,7 @@ public final class AnonymousDisposable : DisposeBase, Cancelable {
     - parameter disposeAction: Disposal action which will be run upon calling `dispose`.
     */
     public init(_ disposeAction: DisposeAction) {
-        self.disposeAction = disposeAction
+        _disposeAction = disposeAction
         super.init()
     }
 
@@ -45,9 +45,12 @@ public final class AnonymousDisposable : DisposeBase, Cancelable {
     */
     public func dispose() {
         if OSAtomicCompareAndSwap32(0, 1, &_disposed) {
-            let action = self.disposeAction!
-            self.disposeAction = nil
-            action()
+            assert(_disposed == 1)
+
+            if let action = _disposeAction {
+                _disposeAction = nil
+                action()
+            }
         }
     }
 }

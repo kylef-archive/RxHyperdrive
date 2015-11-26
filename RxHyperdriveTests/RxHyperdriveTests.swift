@@ -16,7 +16,7 @@ class RxHyperdriveTests: XCTestCase {
 
     let hyperdrive = Hyperdrive()
 
-    hyperdrive.enter("https://polls.apiblueprint.org/")
+    let disposable = hyperdrive.enter("https://polls.apiblueprint.org/")
       .flatMap { representor in
         hyperdrive.request(representor.transitions["questions"])
       }
@@ -26,5 +26,6 @@ class RxHyperdriveTests: XCTestCase {
       }
 
     waitForExpectationsWithTimeout(5.0, handler: nil)
+    disposable.dispose()
   }
 }

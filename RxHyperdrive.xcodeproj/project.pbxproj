@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		27BF42B31BA5FBE000D70CE8 /* RxHyperdrive.h in Headers */ = {isa = PBXBuildFile; fileRef = 27BF42B21BA5FBE000D70CE8 /* RxHyperdrive.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		27BF42BA1BA5FBE100D70CE8 /* RxHyperdrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BF42AF1BA5FBE000D70CE8 /* RxHyperdrive.framework */; settings = {ASSET_TAGS = (); }; };
+		27BF42BA1BA5FBE100D70CE8 /* RxHyperdrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27BF42AF1BA5FBE000D70CE8 /* RxHyperdrive.framework */; };
 		27BF42BF1BA5FBE100D70CE8 /* RxHyperdriveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF42BE1BA5FBE100D70CE8 /* RxHyperdriveTests.swift */; };
-		27BF42CA1BA5FD0000D70CE8 /* RxHyperdrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF42C91BA5FD0000D70CE8 /* RxHyperdrive.swift */; settings = {ASSET_TAGS = (); }; };
-		9986B65354CC8BF2E0C77E78 /* Pods_RxHyperdrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4715EE9A84AE94FAAB5E0C8 /* Pods_RxHyperdrive.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		A030E72D51550A477EE0E679 /* Pods_RxHyperdriveTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2AE37DAF6D59DE9188B023 /* Pods_RxHyperdriveTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		27BF42CA1BA5FD0000D70CE8 /* RxHyperdrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BF42C91BA5FD0000D70CE8 /* RxHyperdrive.swift */; };
+		9986B65354CC8BF2E0C77E78 /* Pods_RxHyperdrive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4715EE9A84AE94FAAB5E0C8 /* Pods_RxHyperdrive.framework */; };
+		A030E72D51550A477EE0E679 /* Pods_RxHyperdriveTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D2AE37DAF6D59DE9188B023 /* Pods_RxHyperdriveTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

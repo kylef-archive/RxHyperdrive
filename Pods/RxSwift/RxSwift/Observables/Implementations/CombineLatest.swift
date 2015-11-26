@@ -14,130 +14,121 @@ protocol CombineLatestProtocol : class {
     func done(index: Int)
 }
 
-class CombineLatestSink<O: ObserverType> : Sink<O>, CombineLatestProtocol {
+class CombineLatestSink<O: ObserverType>
+    : Sink<O>
+    , CombineLatestProtocol {
     typealias Element = O.E
    
-    let lock = NSRecursiveLock()
-    
-    var hasValueAll: Bool
-    var hasValue: [Bool]
-    var isDone: [Bool]
+    let _lock = NSRecursiveLock()
+
+    private let _arity: Int
+    private var _numberOfValues = 0
+    private var _numberOfDone = 0
+    private var _hasValue: [Bool]
+    private var _isDone: [Bool]
    
-    init(arity: Int, observer: O, cancel: Disposable) {
-        self.hasValueAll = false
-        self.hasValue = [Bool](count: arity, repeatedValue: false)
-        self.isDone = [Bool](count: arity, repeatedValue: false)
+    init(arity: Int, observer: O) {
+        _arity = arity
+        _hasValue = [Bool](count: arity, repeatedValue: false)
+        _isDone = [Bool](count: arity, repeatedValue: false)
         
-        super.init(observer: observer, cancel: cancel)
+        super.init(observer: observer)
     }
     
     func getResult() throws -> Element {
-        return abstractMethod()
+        abstractMethod()
     }
     
     func next(index: Int) {
-        if !hasValueAll {
-            hasValue[index] = true
-            
-            var hasValueAll = true
-            for hasValue in self.hasValue {
-                if !hasValue {
-                    hasValueAll = false;
-                    break;
-                }
-            }
-            
-            self.hasValueAll = hasValueAll;
+        if !_hasValue[index] {
+            _hasValue[index] = true
+            _numberOfValues++
         }
-        
-        if hasValueAll {
+
+        if _numberOfValues == _arity {
             do {
                 let result = try getResult()
-                observer?.on(.Next(result))
+                forwardOn(.Next(result))
             }
             catch let e {
-                observer?.on(.Error(e))
-                self.dispose()
+                forwardOn(.Error(e))
+                dispose()
             }
         }
         else {
             var allOthersDone = true
-            
-            let arity = self.isDone.count
-            for var i = 0; i < arity; ++i {
-                if i != index && !isDone[i] {
+
+            for var i = 0; i < _arity; ++i {
+                if i != index && !_isDone[i] {
                     allOthersDone = false
                     break
                 }
             }
             
             if allOthersDone {
-                observer?.on(.Completed)
-                self.dispose()
+                forwardOn(.Completed)
+                dispose()
             }
         }
     }
     
     func fail(error: ErrorType) {
-        observer?.on(.Error(error))
+        forwardOn(.Error(error))
         dispose()
     }
     
     func done(index: Int) {
-        isDone[index] = true
-        
-        var allDone = true
-        
-        for done in self.isDone {
-            if !done {
-                allDone = false
-                break
-            }
+        if _isDone[index] {
+            return
         }
-        
-        if allDone {
-            observer?.on(.Completed)
+
+        _isDone[index] = true
+        _numberOfDone++
+
+        if _numberOfDone == _arity {
+            forwardOn(.Completed)
             dispose()
         }
     }
-    
-    deinit {
-        
-    }
 }
 
-class CombineLatestObserver<ElementType> : ObserverType {
+class CombineLatestObserver<ElementType>
+    : ObserverType
+    , LockOwnerType
+    , SynchronizedOnType {
     typealias Element = ElementType
     typealias ValueSetter = (Element) -> Void
     
-    let parent: CombineLatestProtocol
+    private let _parent: CombineLatestProtocol
     
-    let lock: NSRecursiveLock
-    let index: Int
-    let this: Disposable
-    let setLatestValue: ValueSetter
+    let _lock: NSRecursiveLock
+    private let _index: Int
+    private let _this: Disposable
+    private let _setLatestValue: ValueSetter
     
     init(lock: NSRecursiveLock, parent: CombineLatestProtocol, index: Int, setLatestValue: ValueSetter, this: Disposable) {
-        self.lock = lock
-        self.parent = parent
-        self.index = index
-        self.this = this
-        self.setLatestValue = setLatestValue
+        _lock = lock
+        _parent = parent
+        _index = index
+        _this = this
+        _setLatestValue = setLatestValue
     }
     
     func on(event: Event<Element>) {
-        lock.performLocked {
-            switch event {
-            case .Next(let value):
-                setLatestValue(value)
-                parent.next(index)
-            case .Error(let error):
-                this.dispose()
-                parent.fail(error)
-            case .Completed:
-                this.dispose()
-                parent.done(index)
-            }
+        synchronizedOn(event)
+    }
+
+    func _synchronized_on(event: Event<Element>) {
+        switch event {
+        case .Next(let value):
+            _setLatestValue(value)
+            _parent.next(_index)
+        case .Error(let error):
+            _this.dispose()
+            _parent.fail(error)
+        case .Completed:
+            _this.dispose()
+            _parent.done(_index)
         }
     }
 }
